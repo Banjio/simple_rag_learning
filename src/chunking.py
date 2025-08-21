@@ -3,9 +3,9 @@ from pathlib import Path
 from typing import List
 from tqdm import tqdm
 from src.custom_types import PATHLIKE
-from src.helper import _convert_to_path
+from src.helper import _convert_to_path, str_to_uuid
 from src.config import INGESTED_DIR, CHUNKED_DIR
-
+import hashlib as hash
 CHUNK_SIZE = 1000   # characters per chunk
 CHUNK_OVERLAP = 200 # overlap between chunks
 
@@ -38,13 +38,11 @@ class Chunker:
         Reads a .txt file, chunks it, and saves chunks as JSON.
         """
         text = file_path.read_text(encoding="utf-8")
-        chunks = self.chunk_text(text, self.chunk_size, self.chunk_overlap)
-
-        # Prepare structured data
+        chunks = self.chunk_text(text, self.chunk_size, self.chunk_overlap)        # Prepare structured data
         data = [
             {
                 "source": file_path.name,
-                "chunk_id": i,
+                "pk_chunk":str_to_uuid(chunk),
                 "text": chunk
             }
             for i, chunk in enumerate(chunks)

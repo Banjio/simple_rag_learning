@@ -13,3 +13,7 @@ wheels/
 documents_db/
 temp/
 files/
+
+# Vscode configs
+
+.vscode/
